@@ -94,12 +94,12 @@ def generate_spells(count: int = 6) -> List[str]:
         """Generate a list of spell names."""
         return random.sample(SPELL_NAMES, min(count, len(SPELL_NAMES)))
 
-    @classmethod
+
 def generate_spell_powers(count: int = 5) -> List[int]:
     """Generate a list of spell power values."""
     return [random.randint(10, 50) for _ in range(count)]
 
-@classmethod
+
 def generate_enchantment_items(count: int = 5) -> List[str]:
     """Generate a list of items to be enchanted."""
     items = [
@@ -117,24 +117,48 @@ def generate_enchantment_items(count: int = 5) -> List[str]:
 
 artifact_sorter = lambda artifacts: sorted(artifacts, key=lambda artifact:
                                            artifact["power"], reverse=True)
-min_power = 50
 
-# lista = generate_artifacts(4)
+mage_stats = lambda x: {
+    "max_power": max(x),
+    "min_power": min(x),
+    "avg_power": sum(x)/len(x)
+    } if x else {
+    "max_power": 0,
+    "min_power": 0,
+    "avg_power": 0
+    }
 
-# print(lista)
-# lista = artifact_sorter(lista)
-# print()
-# print(lista)
 
-mages = generate_mages(4)
+def main() -> None:
+    print("Testing artifact sorter...")
+    lista = generate_artifacts(4)
+    print(f" Original: {lista}")
+    lista = artifact_sorter(lista)
+    print(f" Sorted:  {lista}")
+    print()
 
-print(mages)
-power_filter = filter(lambda mage: mage["power"] < min_power,   mages)
-print()
-print(list(power_filter))
+    print("Testing power filter...")
+    min_power = 50
+    mages = generate_mages(4)
+    power_filter = list(filter(lambda mage: mage["power"] < min_power,   mages))
+    print(f" Original: {mages}")
+    print(f" Filtered: {power_filter}")
+    print()
 
-spells = generate_spells()
-print(spells)
-spell_transformer(, spells)
+    print("Testing spell transformer...")
+    spells = generate_spells()
+    print(f" Original {spells}")
+    spell_transformer = list(map(lambda x: "*" + x + "*", spells))
+    print(f" Transformed { spell_transformer}")
+    print()
 
-transformer = map("*")
+    print("Testing Merge Stats...")
+    data = generate_spell_powers()
+    print(f" Original {data}")
+
+    res = mage_stats(data)
+    print(f"Stats: {res}")
+
+
+if __name__ == "__main__":
+    main()
