@@ -1,6 +1,5 @@
 from collections.abc import Callable
 from typing import Any
-import random
 
 
 def mage_counter() -> Callable:
