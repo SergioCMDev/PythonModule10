@@ -8,11 +8,11 @@ SPELL_NAMES = [
 ]
 
 
-def condition_function_true() -> bool:
+def condition_function_true(*args: Any, **kwargs: Any) -> bool:
     return True
 
 
-def condition_function_false() -> bool:
+def condition_function_false(*args: Any, **kwargs: Any) -> bool:
     return False
 
 
@@ -22,6 +22,10 @@ def heal(target: str, power: int) -> str:
 
 def hit(target: str, power: int) -> str:
     return f"Hit damages {target} for {power} HP"
+
+
+def explosion(target: str, power: int) -> str:
+    return f"Explosion damages {target} for {power} HP"
 
 
 def main() -> None:
@@ -35,7 +39,7 @@ def main() -> None:
     conditional2 = conditional_caster(condition_function_false, heal)
     print(conditional2("Orc", 30))
 
-    spells: list[Callable] = [heal, hit]
+    spells: list[Callable] = [heal, hit, explosion]
     spell_iterator = spell_sequence(spells)
     print(spell_iterator("Orc", 30))
 
@@ -55,11 +59,10 @@ def power_amplifier(base_spell: Callable, multiplier: int) -> Callable:
 
 
 def conditional_caster(condition: Callable, spell: Callable) -> Callable:
-    def conditional_spell(*args: Any, **kwargs: Any) -> Callable:
-        if condition():
+    def conditional_spell(*args: Any, **kwargs: Any) -> Any:
+        if condition(*args, **kwargs):
             return spell(*args, **kwargs)
-        else:
-            return "Spell fizzled"
+        return "Spell fizzled"
     return conditional_spell
 
 
@@ -70,10 +73,6 @@ def spell_sequence(spells: list[Callable]) -> Callable:
             result.append(spell(*args, **kwargs))
         return result
     return spell_iterator
-
-
-def spell(target: str, power: int) -> str:
-    pass
 
 
 def multiplier(target: str, power: int) -> str:
