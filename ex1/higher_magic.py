@@ -29,16 +29,27 @@ def explosion(target: str, power: int) -> str:
 
 
 def main() -> None:
+    print("Testing Spell combiner...")
+
     combined = spell_combiner(heal, hit)
-    print(combined("Orc", 30))
+    print(f"Combined spell result: {combined("Orc", 30)}")
+    print()
 
-    amplifier = power_amplifier(heal, 5)
-    print(amplifier("Orc", 30))
+    print("Testing power amplifier...")
+    original_value: int = 5
+    amplifier = power_amplifier(heal, original_value)
+    print(f"Original {original_value} Combined spell result: "
+          f"{amplifier("Orc", 30)}")
+    print()
+
+    print("Testing conditional caster...")
     conditional = conditional_caster(condition_function_true, heal)
-    print(conditional("Orc", 30))
+    print(f"If True: {conditional("Orc", 30)}")
     conditional2 = conditional_caster(condition_function_false, heal)
-    print(conditional2("Orc", 30))
+    print(f"If False {conditional2("Orc", 30)}")
+    print()
 
+    print("Testing artifact sorter...")
     spells: list[Callable] = [heal, hit, explosion]
     spell_iterator = spell_sequence(spells)
     print(spell_iterator("Orc", 30))
