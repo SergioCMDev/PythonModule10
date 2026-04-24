@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from functools import reduce, partial
+from functools import reduce, partial, lru_cache
 from typing import Any
 
 
@@ -39,8 +39,12 @@ def partial_enchanter(base_enchantment: Callable) -> dict[str, Callable]:
     return {"power": power_res, "element": element_res, "target": target_res}
 
 
+@lru_cache(maxsize=128)
 def memoized_fibonacci(n: int) -> int:
-    pass
+    if (n <= 1):
+        return n
+    else:
+        return memoized_fibonacci(n - 1) + memoized_fibonacci(n - 2)
 
 def spell_dispatcher() -> Callable[[Any], str]:
     pass
@@ -59,6 +63,8 @@ def main() -> None:
     print(ench["power"](element="Fire", target="Orc"))
 
     print("Testing memoized fibonacci...")
+    print(memoized_fibonacci(5))
+
 
 if __name__ == "__main__":
     main()
