@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from functools import reduce, partial, lru_cache
+from functools import reduce, partial, lru_cache, singledispatch
 from typing import Any
 
 
@@ -46,8 +46,25 @@ def memoized_fibonacci(n: int) -> int:
     else:
         return memoized_fibonacci(n - 1) + memoized_fibonacci(n - 2)
 
-def spell_dispatcher() -> Callable[[Any], str]:
-    pass
+
+@singledispatch
+def spell_dispatcher(spell: Any) -> str:
+    return (f"unknwon spell type {spell}")
+
+
+@spell_dispatcher.register(int)
+def _ (arg: int) -> str:
+    return (f"Damage spell: {arg} damage")
+
+
+@spell_dispatcher.register(str)
+def _ (arg: str) -> str:
+    return (f"Enachment: {arg}")
+
+
+@spell_dispatcher.register(list)
+def _ (arg: list[Any]) -> str:
+    return (f"Multi-cast: {len(arg)} spells")
 
 
 def main() -> None:
@@ -64,6 +81,13 @@ def main() -> None:
 
     print("Testing memoized fibonacci...")
     print(memoized_fibonacci(5))
+
+    print("Testing spell dispatcher...")
+    print(spell_dispatcher(42))
+    print(spell_dispatcher("fireball"))
+    spells: list[str] = ["heal", "fireball", "poison"]
+    print(spell_dispatcher(spells))
+    print(spell_dispatcher(4.9))
 
 
 if __name__ == "__main__":
