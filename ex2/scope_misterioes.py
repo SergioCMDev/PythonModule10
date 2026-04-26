@@ -80,7 +80,7 @@ def main() -> None:
     vault["store"]("secret", "42")
     print("Store 'secret' = 42")
     print(f"Recall '{key_to_store}': {vault["recall"](key_to_store)}")
-    key_to_store: str = "unknown"
+    key_to_store = "unknown"
 
     print(f"Recall '{key_to_store}': {vault["recall"](key_to_store)}")
 

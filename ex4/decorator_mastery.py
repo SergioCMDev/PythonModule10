@@ -23,10 +23,13 @@ def spell_timer(func: Callable) -> Callable:
 def power_validator(min_power: int) -> Callable:
     def decorator(func: Callable) -> Callable:
         @wraps(func)
-        def wrapper(power: int,  *args: Any, **kwargs: Any) -> Callable:
+        def wrapper(
+                spell_name: str,
+                power: int,
+                *args: Any,
+                **kwargs: Any) -> str | Any:
             if (power >= min_power):
-                print("OK")
-                return func(power, *args, **kwargs)
+                return func(spell_name, power, *args, **kwargs)
             else:
                 return "Insufficient power for this spell"
         return wrapper
@@ -36,7 +39,7 @@ def power_validator(min_power: int) -> Callable:
 def retry_spell(max_attempts: int) -> Callable:
     attempt: int = 0
 
-    def decorator(func: Callable) -> Callable:
+    def decorator(func: Callable) -> str | Any:
         nonlocal attempt
         if (attempt < max_attempts):
             try:
@@ -54,19 +57,26 @@ def retry_spell(max_attempts: int) -> Callable:
 class MageGuild:
     @staticmethod
     def validate_mage_name(name: str) -> bool:
-        pass
+        size: int = len(name)
+        letter_spaces: bool = all(letter == ' ' or letter.isalpha()
+                                  for letter in name)
+        return letter_spaces and size >= 3
 
     def cast_spell(self, spell_name: str, power: int) -> str:
-        pass
+        validator = power_validator(10)
+        created_spell_funct = validator(spell_casted_right)
+        res = created_spell_funct(spell_name, power)
+        return res
 
 
 def hello() -> str:
     print("We are executing Hello")
+    time.sleep(0.59876)
     return ("Hello")
 
 
-def hello_2(power: int) -> str:
-    print(f"We are executing Hello with {power}")
+def hello_2(spell_name: str, power: int) -> str:
+    print(f"We are executing {spell_name} with {power}")
     return ("Hello")
 
 
@@ -78,20 +88,38 @@ def raiserExcept() -> str:
         raise Exception
 
 
+def spell_casted_right(spell_name: str, power: int) -> str:
+    return f"Successfully cast '{spell_name}' with '{power}' power"
+
+
 def main() -> None:
     print("Testing spell timer")
     timed_hello = spell_timer(hello)
     res = timed_hello()
-    print(res)
+    print(f"Result: {res}")
     print()
     print("Testing power_validator")
     validator = power_validator(20)
     right_spell = validator(hello_2)
-    right_spell(30)
+    res = right_spell("Hello", 30)
+    print(res)
+    res = right_spell("Hello", 10)
+    print(res)
+
+    print()
+
     print("Testing retry spell")
     retrier = retry_spell(3)
     res = retrier(raiserExcept)
     print(res)
+    print()
+    print("Testing MageGuild...")
+    print(MageGuild.validate_mage_name(" a "))
+    print(MageGuild.validate_mage_name(" a"))
+
+    mageGuild = MageGuild()
+    print(mageGuild.cast_spell("pepito", 10))
+    print(mageGuild.cast_spell("fire", 5))
 
 
 if __name__ == "__main__":
