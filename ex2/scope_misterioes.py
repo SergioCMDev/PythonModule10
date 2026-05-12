@@ -1,6 +1,6 @@
 from collections.abc import Callable
 from typing import Any
-
+# flake8: noqa: F824
 
 def mage_counter() -> Callable:
     counter: int = 1
@@ -39,7 +39,7 @@ def memory_vault() -> dict[str, Callable]:
     memory: dict[str, str] = {}
 
     def store(key: str, value: str) -> None:
-        nonlocal memory
+        nonlocal memory #a
         memory[key] = value
 
     def recall(key: str) -> Any:
@@ -79,10 +79,10 @@ def main() -> None:
     key_to_store: str = "secret"
     vault["store"]("secret", "42")
     print("Store 'secret' = 42")
-    print(f"Recall '{key_to_store}': {vault["recall"](key_to_store)}")
+    print(f"Recall '{key_to_store}': {vault['recall'](key_to_store)}")
     key_to_store = "unknown"
 
-    print(f"Recall '{key_to_store}': {vault["recall"](key_to_store)}")
+    print(f"Recall '{key_to_store}': {vault['recall'](key_to_store)}")
 
 
 if __name__ == "__main__":

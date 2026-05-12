@@ -70,10 +70,10 @@ def _ (arg: list[Any]) -> str:
 def main() -> None:
     lista: list[int] = [1, 2, 4, 5, 6]
     print("Test spell reducer")
-    print(f"Sum {spell_reducer(lista, "add")}")
-    print(f"Product {spell_reducer(lista, "multiply")}")
-    print(f"Max {spell_reducer(lista, "max")}")
-    print(f"Min {spell_reducer(lista, "min")}")
+    print(f"Sum {spell_reducer(lista, 'add')}")
+    print(f"Product {spell_reducer(lista, 'multiply')}")
+    print(f"Max {spell_reducer(lista, 'max')}")
+    print(f"Min {spell_reducer(lista, 'min')}")
     print()
     print("Test partial enchanter")
     ench = partial_enchanter(enachment)
